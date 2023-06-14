@@ -1,33 +1,32 @@
 import { Modal, Button } from "react-bootstrap";
-import { useState } from 'react';
-import { postCreateUser } from "../service/userService";
+import { useEffect, useState } from 'react';
+import { putUpdateUser } from "../service/userService";
 import { toast } from 'react-toastify';
 
 const ModalAddNew = (props) => {
     const [name, setName] = useState("");
     const [job, setJob] = useState("");
-    const { show, handleClose, handleUpdateTable } = props;
-    const handleSaveUser = async () => {
-        let res = await postCreateUser(name, job);
-        //console.log("res", res);
-        if (res && res.id && name != "") {
-            //success
-            handleClose();
-            setName('');
-            setJob('');
-            toast.success("Success!");
-            handleUpdateTable({ first_name: name, id: res.id });
-        } else {
-            toast.error("Failed!");
-            handleClose();
-            //error
-        }
+    const { show, handleClose, dataUserEdit, handleUpdateTableUserModal } = props;
+    const handleEditUser = async () => {
+        let res = await putUpdateUser(name, job);
+        handleUpdateTableUserModal({
+            first_name: name,
+            id: dataUserEdit.id
+        })
+        handleClose();
+        toast.success("Success!");
     }
-
+    useEffect(() => {
+        // run when modal is open
+        if (show) {
+            setName(dataUserEdit.first_name)
+        }
+    }, [dataUserEdit])
+    //console.log("list user check:", dataUserEdit);
     return (<>
         <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
             <Modal.Header closeButton>
-                <Modal.Title>Add New User</Modal.Title>
+                <Modal.Title>Edit</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <div>
@@ -46,7 +45,7 @@ const ModalAddNew = (props) => {
                 <Button variant="secondary" onClick={handleClose}>
                     Close
                 </Button>
-                <Button variant="primary" onClick={handleSaveUser}>
+                <Button variant="primary" onClick={handleEditUser}>
                     Save Changes
                 </Button>
             </Modal.Footer>
