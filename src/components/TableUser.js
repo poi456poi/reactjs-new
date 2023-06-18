@@ -1,19 +1,29 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
-import Table from 'react-bootstrap/Table';
+import { useEffect, useState, useSyncExternalStore } from 'react';
+import TableMain from './Table';
 import { fetchAlluser } from '../service/userService';
 import ReactPaginate from 'react-paginate';
 import ModalAddNew from './Modal-AddNew';
 import ModalEditUser from './Modal-EditUser';
 import _ from 'lodash';
+import { debounce } from 'lodash';
 import { CarouselItem } from 'react-bootstrap';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 import ModalConfirmDel from './Modal-ConfirmDelete';
+import Papa from "papaparse";
+import { toast } from 'react-toastify';
+
 const TableUsers = (props) => {
     const [IsshowModalAddnew, setIsModalAddnew] = useState(false);
     const [IsshowModalEditUsers, setIsshowModalEditUsers] = useState(false);
     const [IsshowModalConfirmDel, setIsshowModalConfirmDel] = useState(false);
     const [dataUserEdit, setDataUserEdit] = useState({});
     const [listUserDelete, setListUserDelete] = useState({});
+    const [sortBy, setSortBy] = useState("asc");
+    const [fieldSort, setfieldSort] = useState("id");
+    const [csvData, setcsvData] = useState([]);
 
     const [listUsers, setListUsers] = useState([]);
     const [totalUsers, settotalUsers] = useState(0);
@@ -33,7 +43,7 @@ const TableUsers = (props) => {
         let index = listUsers.findIndex(item => item.id === user.id);
         clonelistUsers[index].first_name = user.first_name;
         setListUsers(clonelistUsers);
-        console.log(clonelistUsers)
+        //console.log(clonelistUsers)
     }
     const handleDeleteTableUserModal = (user) => {
         //lodash
@@ -50,14 +60,8 @@ const TableUsers = (props) => {
     const handleDelete = (user) => {
         setIsshowModalConfirmDel(true);
         setListUserDelete(user);
-        console.log(listUserDelete)
+        //console.log(listUserDelete)
     }
-    useEffect(() => {
-        //call apis
-
-        getAllusers();
-
-    }, [])
 
     const getAllusers = async (page) => {
         let res = await fetchAlluser(page);
@@ -68,45 +72,108 @@ const TableUsers = (props) => {
             //console.log("data:", res.data)
         }
     }
+    useEffect(() => {
+        //call apis
+
+        getAllusers();
+
+    }, [])
     const handlePageClick = (event) => {
         console.log(event)
         getAllusers(+event.selected + 1);
     };
+    const handleSort = (sortBy, sortField) => {
+        setSortBy(sortBy);
+        setfieldSort(sortField);
+        let clonelistUsers = _.cloneDeep(listUsers);
+        clonelistUsers = _.orderBy(clonelistUsers, [sortField], [sortBy]);
+        setListUsers(clonelistUsers)
+    }
+    const handleSearch = debounce((event) => {
+        let keyword = event.target.value;
+        let clonelistUsers = _.cloneDeep(listUsers);
+        clonelistUsers = clonelistUsers.filter(item => item.first_name.includes(keyword) || item.last_name.includes(keyword));
+        console.log(clonelistUsers);
+        if (keyword) {
+            setListUsers(clonelistUsers);
+        } else {
+            getAllusers();
+        }
+
+    }, 1000);
+    //customize data export
+    const getDataExport = (event, done) => {
+        let res = [];
+        if (listUsers && listUsers.length > 0) {
+            res.push(["ID", "Email", "First Name", "Last Name"]);
+            listUsers.map((item, index) => {
+                let arr = [];
+                arr[0] = item.id;
+                arr[1] = item.email;
+                arr[2] = item.first_name;
+                arr[3] = item.last_name;
+                res.push(arr)
+            })
+        }
+        setcsvData(res);
+        done();
+    }
+    const handleimportCSV = (event) => {
+        let file = event.target.files[0];
+        console.log(file)
+        if (file && file.type !== "text/csv") {
+            console.log("fafa");
+            return;
+
+        }
+
+        //Parse CSV data
+        let res = [];
+        Papa.parse(file, {
+            complete: function (results) {
+                let rawDataCSV = results.data;
+                console.log(results.data)
+                if (rawDataCSV.length > 0) {
+                    if (rawDataCSV[0]) {
+                        if (rawDataCSV[0][0] !== "ID" || rawDataCSV[0][1] !== "email" || rawDataCSV[0][2] !== "first_name" || rawDataCSV[0][3] !== "last_name") {
+                            toast.error("Wrong format CSV file")
+                        } else {
+                            rawDataCSV.map((item, index) => {
+                                if (index > 0 && item.length > 3) {
+                                    let obj = {};
+                                    obj.email = item[0];
+                                    obj.first_name = item[1];
+                                    obj.last_name = item[2];
+                                    res.push(obj)
+                                }
+                            })
+                            console.log("check datacsv:", res);
+                            setListUsers(res)
+
+                        }
+                    } else {
+                        toast.error("No Data")
+                    }
+                } else {
+                    toast.error("error");
+                }
+            }
+        })
+
+    }
 
     return (<>
-        <div className='add-new'>
-            <span><h3>List Users</h3></span>
-            <button type="button" className="btn btn-info" onClick={() => setIsModalAddnew(true)}>Add New</button>
-        </div>
-        <Table striped bordered hover>
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Email</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {listUsers && listUsers.length > 0 &&
-                    listUsers.map((item, index) => {
-                        return (
-                            <tr key={`users-${index}`}>
-                                <td>{item.id}</td>
-                                <td>{item.email}</td>
-                                <td>{item.first_name}</td>
-                                <td>{item.last_name}</td>
-                                <td>
-                                    <button onClick={() => handleEdit(item)}>Edit</button>
-                                    <button onClick={() => handleDelete(item)}>Delete</button>
-                                </td>
-                            </tr>
-                        )
-                    })
-                }
-            </tbody>
-        </Table>
+        <TableMain
+            listUsers={listUsers}
+            handleSort={handleSort}
+            handleEdit={handleEdit}
+            handleDelete={handleDelete}
+            setIsModalAddnew={setIsModalAddnew}
+            handleSearch={handleSearch}
+            csvData={csvData}
+            getDataExport={getDataExport}
+            handleimportCSV={handleimportCSV}
+        />
         <ReactPaginate
             // table contribute
             pageRangeDisplayed={10}

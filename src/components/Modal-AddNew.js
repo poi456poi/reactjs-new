@@ -10,7 +10,7 @@ const ModalAddNew = (props) => {
     const handleSaveUser = async () => {
         let res = await postCreateUser(name, job);
         //console.log("res", res);
-        if (res && res.id && name != "") {
+        if (res && res.id && name) {
             //success
             handleClose();
             setName('');
@@ -18,7 +18,7 @@ const ModalAddNew = (props) => {
             toast.success("Success!");
             handleUpdateTable({ first_name: name, id: res.id });
         } else {
-            toast.error("Failed!");
+            name === "" ? toast.error("Name can'not blank") : toast.error("Failed!");
             handleClose();
             //error
         }

@@ -1,0 +1,63 @@
+.login-container {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+
+    .title {
+        text-align: center;
+        font-size: 30px;
+        font-weight: 800;
+    }
+
+    .text {
+        font-weight: 600;
+        padding-bottom: 0.3rem;
+    }
+
+    input {
+        padding: 10px 5px;
+        margin-bottom: 10px;
+        border-radius: 3px;
+        border: none;
+        outline: none;
+        width: 100%;
+
+        &:hover {
+            background-color: rgba(243, 227, 227, 0.815);
+            border-color: rgba(243, 227, 227, 0.815);
+            border-radius: 3px;
+
+        }
+    }
+
+    .input-password {
+        position: relative;
+
+        i {
+            position: absolute;
+            top: 15px;
+            right: 10px;
+            cursor: pointer;
+        }
+
+    }
+
+    button {
+        margin-top: 0.5rem;
+        cursor: pointer;
+        border-radius: 6px;
+        border: none;
+        outline: none;
+
+        &.active {
+            background-color: red;
+            color: white;
+        }
+
+    }
+
+    button[disabled=disabled],
+    button:disabled {
+        cursor: not-allowed;
+    }
+}

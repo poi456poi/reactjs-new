@@ -1,0 +1,28 @@
+.sort-header {
+    display: flex;
+    justify-content: space-between;
+
+    i {
+        cursor: pointer;
+    }
+}
+
+.search-bar {
+    display: flex;
+
+    .form-control {
+        margin-right: 5%;
+    }
+}
+
+.add-new {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+
+    .group-btn {
+        display: flex;
+        gap: 4px;
+    }
+}
