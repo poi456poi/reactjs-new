@@ -1,22 +1,38 @@
 import '../components/Login.scss';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { LoginSer } from '../service/userService';
 import { toast } from 'react-toastify';
+import { UserContext } from '../context/UserContext';
+import { useNavigate } from 'react-router-dom';
+
 const Login = (props) => {
 
+    const { loginContext } = useContext(UserContext);
+    const navigate = useNavigate("/");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [IsShowpassword, setIsShowpassword] = useState(false);
+    const [loadingData, setloadingData] = useState(false);
 
     const handleLogin = async () => {
         if (!email || !password) {
             toast.error("email or password is blank");
             return;
         }
+        setloadingData(true);
         let res = await LoginSer(email, password);
+        console.log(res);
         if (res && res.token) {
-            localStorage.setItem("token", res.token)
+            loginContext(email, res.token);
+            toast.success("Welcome");
+            navigate("/");
+        } else {
+            //error
+            if (res && res.status === 400) {
+                toast.error(res.data.error)
+            }
         }
+        setloadingData(false);
 
     }
     return (<>
@@ -39,7 +55,7 @@ const Login = (props) => {
                 className={email && password ? "active" : ""}
                 disabled={email && password ? false : true}
                 onClick={() => handleLogin()}
-            >Login</button>
+            >{loadingData && <i className="fas fa-circle-notch fa-spin"></i>}&nbsp;Login</button>
         </div >
     </>)
 }
