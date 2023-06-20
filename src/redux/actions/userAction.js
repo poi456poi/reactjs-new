@@ -9,6 +9,7 @@ export const FETCH_USER_ERROR = "FETCH_USER_ERROR";
 export const FETCH_USER_SUCCESS = "FETCH_USER_SUCCESS";
 
 export const USER_LOGOUT = "USER_LOGOUT";
+export const USER_REFRESH = "USER_REFRESH";
 
 
 export const handleLoginRedux = (email, password) => {
@@ -39,6 +40,13 @@ export const handleLogoutRedux = () => {
     return (dispatch, getstate) => {
         dispatch({
             type: USER_LOGOUT
+        })
+    }
+}
+export const handleRefreshRedux = () => {
+    return (dispatch, getstate) => {
+        dispatch({
+            type: USER_REFRESH
         })
     }
 }

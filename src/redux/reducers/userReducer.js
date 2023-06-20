@@ -1,4 +1,4 @@
-import { FETCH_USER_LOGIN, FETCH_USER_SUCCESS, FETCH_USER_ERROR, USER_LOGOUT } from '../actions/userAction';
+import { FETCH_USER_LOGIN, FETCH_USER_SUCCESS, FETCH_USER_ERROR, USER_LOGOUT, USER_REFRESH } from '../actions/userAction';
 
 
 const INITIAL_STATE = {
@@ -12,7 +12,6 @@ const INITIAL_STATE = {
     }
 };
 const userReducer = (state = INITIAL_STATE, action) => {
-
     switch (action.type) {
 
         case FETCH_USER_LOGIN:
@@ -57,6 +56,15 @@ const userReducer = (state = INITIAL_STATE, action) => {
                     email: '',
                     token: '',
                     auth: false
+                }
+            }
+        case USER_REFRESH:
+            return {
+                ...state,
+                account: {
+                    email: localStorage.getItem('email'),
+                    token: localStorage.getItem('token'),
+                    auth: true
                 }
             }
 
