@@ -15,4 +15,10 @@ const deleteUser = (id) => {
 const LoginSer = (email, password) => {
     return axios.post(`/api/login`, { email, password })
 }
-export { fetchAlluser, postCreateUser, putUpdateUser, deleteUser, LoginSer };
+const RegisterSer = (email, password) => {
+    return axios.post(`/api/register`, { email, password })
+}
+
+
+
+export { fetchAlluser, postCreateUser, putUpdateUser, deleteUser, LoginSer, RegisterSer };

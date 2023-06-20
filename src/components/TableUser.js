@@ -79,7 +79,6 @@ const TableUsers = (props) => {
 
     }, [])
     const handlePageClick = (event) => {
-        console.log(event)
         getAllusers(+event.selected + 1);
     };
     const handleSort = (sortBy, sortField) => {
@@ -93,7 +92,6 @@ const TableUsers = (props) => {
         let keyword = event.target.value;
         let clonelistUsers = _.cloneDeep(listUsers);
         clonelistUsers = clonelistUsers.filter(item => item.first_name.includes(keyword) || item.last_name.includes(keyword));
-        console.log(clonelistUsers);
         if (keyword) {
             setListUsers(clonelistUsers);
         } else {

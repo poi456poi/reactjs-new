@@ -1,44 +1,42 @@
-import '../components/Login.scss';
-import { useState, useContext } from 'react';
-import { LoginSer } from '../service/userService';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { UserContext } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
+import { handleLoginRedux } from '../redux/actions/userAction';
+import { useDispatch, useSelector } from "react-redux";
 
+import '../assets/Login.scss';
 const Login = (props) => {
 
-    const { loginContext } = useContext(UserContext);
+    const dispatch = useDispatch();
     const navigate = useNavigate("/");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [IsShowpassword, setIsShowpassword] = useState(false);
-    const [loadingData, setloadingData] = useState(false);
+    const isLoading = useSelector(state => state.user.isLoading);
+    const account = useSelector(state => state.user.account);
 
     const handleLogin = async () => {
         if (!email || !password) {
             toast.error("email or password is blank");
             return;
         }
-        setloadingData(true);
-        let res = await LoginSer(email, password);
-        console.log(res);
-        if (res && res.token) {
-            loginContext(email, res.token);
-            toast.success("Welcome");
-            navigate("/");
-        } else {
-            //error
-            if (res && res.status === 400) {
-                toast.error(res.data.error)
-            }
-        }
-        setloadingData(false);
+        dispatch(handleLoginRedux(email, password));
 
     }
+    const handlekeypress = (event) => {
+        if (event && event.key === "Enter") {
+            handleLogin();
+        }
+    }
+    useEffect(() => {
+        if (account && account.auth === true) {
+            navigate("/");
+        }
+    }, [account])
     return (<>
         <div className="login-container col-4">
             <div className="title">Login</div>
-            <div className="text">UserName or Email</div>
+            <div className="text">Email or username</div>
             <input
                 type="text"
                 placeholder="Username or email..."
@@ -48,14 +46,15 @@ const Login = (props) => {
                 <input type={IsShowpassword ? "text" : "password"}
                     placeholder="Password..."
                     value={password}
-                    onChange={(event) => setPassword(event.target.value)} />
+                    onChange={(event) => setPassword(event.target.value)}
+                    onKeyDown={(event) => handlekeypress(event)} />
                 <i onClick={() => setIsShowpassword(!IsShowpassword)} className={IsShowpassword ? "fa-solid fa-eye" : "fa-solid fa-eye-slash"}></i>
             </div>
             <button
                 className={email && password ? "active" : ""}
                 disabled={email && password ? false : true}
                 onClick={() => handleLogin()}
-            >{loadingData && <i className="fas fa-circle-notch fa-spin"></i>}&nbsp;Login</button>
+            >{isLoading && <i className="fas fa-circle-notch fa-spin"></i>}&nbsp;Login</button>
         </div >
     </>)
 }
