@@ -26,7 +26,7 @@ const ModalConfirmDel = (props) => {
             </Modal.Header>
             <Modal.Body>
                 <div>
-                    Are you Sure Delete User: {listUserDelete.first_name + " " + listUserDelete.last_name} ??
+                    Are you Sure Delete User {listUserDelete.first_name + " " + listUserDelete.last_name} ??
                 </div>
             </Modal.Body>
             <Modal.Footer>

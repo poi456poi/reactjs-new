@@ -9,12 +9,12 @@ import { handleRefreshRedux } from './redux/actions/userAction';
 import './assets/App.scss'
 
 function App() {
-    const dispatch=useDispatch();
-    useEffect(()=>{
-      if(localStorage.getItem("token")){
-        dispatch(handleRefreshRedux());
-      }
-    },[])
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      dispatch(handleRefreshRedux());
+    }
+  }, [])
   return (
     <>
       <div className='app-container'>

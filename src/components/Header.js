@@ -44,7 +44,7 @@ const Header = (props) => {
 
                             </Nav>
                             <Nav>
-                                {user && user.email && <p className='nav-link'>Welcome {user.email} </p>}
+                                {(user && user.email) && <p className='nav-link'>Welcome {user.email} </p>}
                                 <NavDropdown title="Setting" id="basic-nav-dropdown">
                                     {user && !user.auth
                                         ? <><NavDropdown.Item onClick={() => handleLogin()}>Login</NavDropdown.Item>

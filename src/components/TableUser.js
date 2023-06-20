@@ -14,6 +14,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import ModalConfirmDel from './Modal-ConfirmDelete';
 import Papa from "papaparse";
 import { toast } from 'react-toastify';
+import '../assets/TableUser.scss'
 
 const TableUsers = (props) => {
     const [IsshowModalAddnew, setIsModalAddnew] = useState(false);
@@ -28,6 +29,16 @@ const TableUsers = (props) => {
     const [listUsers, setListUsers] = useState([]);
     const [totalUsers, settotalUsers] = useState(0);
     const [totalPages, settotalPages] = useState([]);
+
+    const getAllusers = async (page) => {
+        let res = await fetchAlluser(page);
+        if (res && res.data) {
+            setListUsers(res.data)
+            settotalUsers(res.total)
+            settotalPages(res.total_pages)
+            //console.log("data:", res.data)
+        }
+    }
     const handleClose = () => {
         setIsModalAddnew(false);
         setIsshowModalEditUsers(false);
@@ -63,15 +74,7 @@ const TableUsers = (props) => {
         //console.log(listUserDelete)
     }
 
-    const getAllusers = async (page) => {
-        let res = await fetchAlluser(page);
-        if (res && res.data) {
-            setListUsers(res.data)
-            settotalUsers(res.total)
-            settotalPages(res.total_pages)
-            //console.log("data:", res.data)
-        }
-    }
+
     useEffect(() => {
         //call apis
 

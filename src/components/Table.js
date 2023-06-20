@@ -1,10 +1,9 @@
 import Table from 'react-bootstrap/Table';
-import { useState } from 'react';
-import { Button } from "react-bootstrap";
 import { CSVLink, CSVDownload } from "react-csv";
 
 import '../assets/TableUser.scss'
 const TableMain = (props) => {
+
     const { listUsers, handleSort, handleEdit, handleDelete, setIsModalAddnew, handleSearch, csvData, getDataExport, handleimportCSV } = props;
     return (<>
         <div className='add-new'>

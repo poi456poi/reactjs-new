@@ -12,11 +12,12 @@ const ModalAddNew = (props) => {
         //console.log("res", res);
         if (res && res.id && name) {
             //success
+            handleUpdateTable({ first_name: name, id: res.id });
             handleClose();
             setName('');
             setJob('');
             toast.success("Success!");
-            handleUpdateTable({ first_name: name, id: res.id });
+
         } else {
             name === "" ? toast.error("Name can'not blank") : toast.error("Failed!");
             handleClose();

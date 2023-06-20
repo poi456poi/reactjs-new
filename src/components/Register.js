@@ -2,7 +2,7 @@ import { useState, useContext } from 'react';
 import { useNavigate } from "react-router-dom";
 import { RegisterSer } from "../service/userService"
 import { toast } from 'react-toastify';
-import { UserContext } from '../context/UserContext';
+
 
 const Register = (props) => {
     const navigate = useNavigate("/");
@@ -12,7 +12,6 @@ const Register = (props) => {
     const [loadingData, setloadingData] = useState(false);
 
 
-    const { loginContext } = useContext(UserContext);
     const handleRegister = async () => {
         if (!email || !password) {
             toast.error("email or password is blank");
@@ -22,7 +21,6 @@ const Register = (props) => {
         let res = await RegisterSer(email, password);
         console.log(res);
         if (res && res.token) {
-            loginContext(email, res.token);
             toast.success("Success");
             navigate("/");
         }
