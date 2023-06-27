@@ -1,0 +1,43 @@
+.headertop {
+    margin-inline-start: 10%;
+    border-radius: 10px;
+    margin-bottom: 10px;
+
+    .setting-dropdown {
+        background-color: rgb(10, 4, 59);
+        border-radius: 15px;
+        padding-inline: 15px;
+
+        a#basic-nav-dropdown {
+            color: white;
+        }
+    }
+
+    .logo {
+        font-size: 24px;
+        margin-right: 5px;
+    }
+
+
+
+}
+
+.me-auto {
+    font-size: 20px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .logo {
+        animation: App-logo-spin infinite 20s linear;
+    }
+}
+
+@keyframes App-logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

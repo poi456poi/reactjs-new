@@ -5,7 +5,8 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import { NavLink, useNavigate } from "react-router-dom";
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { handleLogoutRedux } from '../redux/actions/userAction'
+import { handleLogoutRedux } from '../redux/actions/userAction';
+import "../assets/Header.scss"
 const Header = (props) => {
 
     const user = useSelector(state => state.user.account);
@@ -31,9 +32,10 @@ const Header = (props) => {
     }, [user])
 
     return (<>
-        <Navbar bg="light" expand="lg">
+        <Navbar className="headertop col-6 " bg="light" expand="lg">
             <Container>
-                <Navbar.Brand href="/">Son React Demo</Navbar.Brand>
+                <i className="logo fa-brands fa-react"></i>
+                <Navbar.Brand href="/"><h4>React Demo</h4></Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     {(user && user.auth || window.location.pathname === '/' || window.location.pathname === '/Register') &&
@@ -45,7 +47,7 @@ const Header = (props) => {
                             </Nav>
                             <Nav>
                                 {(user && user.email) && <p className='nav-link'>Welcome {user.email} </p>}
-                                <NavDropdown title="Setting" id="basic-nav-dropdown">
+                                <NavDropdown title="Setting" id="basic-nav-dropdown" className='setting-dropdown' >
                                     {user && !user.auth
                                         ? <><NavDropdown.Item onClick={() => handleLogin()}>Login</NavDropdown.Item>
                                             <NavDropdown.Item onClick={() => handleRegister()}>Register</NavDropdown.Item></>
