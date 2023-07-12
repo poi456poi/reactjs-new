@@ -20,5 +20,4 @@ const RegisterSer = (email, password) => {
 }
 
 
-
-export { fetchAlluser, postCreateUser, putUpdateUser, deleteUser, LoginSer, RegisterSer };
+export { fetchAlluser, postCreateUser, putUpdateUser, deleteUser, LoginSer, RegisterSer, };

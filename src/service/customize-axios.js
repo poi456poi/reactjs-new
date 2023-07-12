@@ -2,6 +2,8 @@ import axios from "axios";
 
 const instance = axios.create({
     baseURL: 'https://reqres.in',
+    //baseURL: 'http://localhost:8063',
+    //baseURL: ''
 });
 // Add a response interceptor
 instance.interceptors.response.use(function (response) {

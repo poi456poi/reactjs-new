@@ -32,13 +32,13 @@ const Header = (props) => {
     }, [user])
 
     return (<>
-        <Navbar className="headertop col-6 " bg="light" expand="lg">
+        <Navbar className="headertop col-9 " bg="light" expand="lg">
             <Container>
                 <i className="logo fa-brands fa-react"></i>
                 <Navbar.Brand href="/"><h4>React Demo</h4></Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
-                    {(user && user.auth || window.location.pathname === '/' || window.location.pathname === '/Register') &&
+                    {(user && user.auth || window.location.pathname === '/') &&
                         <>
                             <Nav className="me-auto">
                                 <NavLink to="/" className="nav-link">Home</NavLink>
@@ -46,15 +46,12 @@ const Header = (props) => {
 
                             </Nav>
                             <Nav>
-                                {(user && user.email) && <p className='nav-link'>Welcome {user.email} </p>}
-                                <NavDropdown title="Setting" id="basic-nav-dropdown" className='setting-dropdown' >
-                                    {user && !user.auth
-                                        ? <><NavDropdown.Item onClick={() => handleLogin()}>Login</NavDropdown.Item>
-                                            <NavDropdown.Item onClick={() => handleRegister()}>Register</NavDropdown.Item></>
-                                        : <NavDropdown.Item onClick={() => handleLogout()}>Logout</NavDropdown.Item>
-                                    }
-
-                                </NavDropdown>
+                                {(user && user.email) && <p className='nav-link'>Welcome {user.email == 'undefined' ? "" : user.email} </p>}
+                                {user && !user.auth
+                                    ? <><a className="loginout" onClick={() => handleLogin()}>Login</a>&nbsp;
+                                        <a className="loginout" onClick={() => handleRegister()}>Sign Up</a></>
+                                    : <a className="loginout" onClick={() => handleLogout()}>Logout</a>
+                                }
                             </Nav>
                         </>
                     }

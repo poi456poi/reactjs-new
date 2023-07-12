@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useEffect, useState, useSyncExternalStore } from 'react';
 import TableMain from './Table';
 import { fetchAlluser } from '../service/userService';
@@ -15,6 +14,7 @@ import ModalConfirmDel from './Modal-ConfirmDelete';
 import Papa from "papaparse";
 import { toast } from 'react-toastify';
 import '../assets/TableUser.scss'
+import { TestAPI } from '../service/userService';
 
 const TableUsers = (props) => {
     const [IsshowModalAddnew, setIsModalAddnew] = useState(false);
@@ -29,16 +29,20 @@ const TableUsers = (props) => {
     const [listUsers, setListUsers] = useState([]);
     const [totalUsers, settotalUsers] = useState(0);
     const [totalPages, settotalPages] = useState([]);
+    const [listUserss, setListUserss] = useState([]);
 
     const getAllusers = async (page) => {
         let res = await fetchAlluser(page);
+        //console.log(res);
         if (res && res.data) {
             setListUsers(res.data)
             settotalUsers(res.total)
             settotalPages(res.total_pages)
             //console.log("data:", res.data)
-        }
+        };
+
     }
+
     const handleClose = () => {
         setIsModalAddnew(false);
         setIsshowModalEditUsers(false);

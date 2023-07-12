@@ -15,6 +15,7 @@ function App() {
       dispatch(handleRefreshRedux());
     }
   }, [])
+
   return (
     <>
       <div className='app-container'>

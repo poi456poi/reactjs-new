@@ -15,6 +15,10 @@ const Login = (props) => {
     const isLoading = useSelector(state => state.user.isLoading);
     const account = useSelector(state => state.user.account);
 
+
+    const handleGoback = () => {
+        navigate("/")
+    }
     const handleLogin = async () => {
         if (!email || !password) {
             toast.error("email or password is blank");
@@ -55,6 +59,7 @@ const Login = (props) => {
                 disabled={email && password ? false : true}
                 onClick={() => handleLogin()}
             >{isLoading && <i className="fas fa-circle-notch fa-spin"></i>}&nbsp;Login</button>
+            <a className="go-back" onClick={() => handleGoback()}>Go Back</a>
         </div >
     </>)
 }
